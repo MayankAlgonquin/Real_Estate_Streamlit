@@ -29,6 +29,6 @@ if __name__ == "__main__":
 
     # Evaluate the model
     plot_feature_importance(model, X)
-    accuracy, confusion_mat = evaluate_model(model, X_test_scaled, y_test)
-    print(f"Accuracy: {accuracy}")
-    print(f"Confusion Matrix:\n{confusion_mat}")
+    metrics = evaluate_model(model, X_test_scaled, y_test)
+
+    print(metrics)

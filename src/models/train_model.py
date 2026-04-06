@@ -1,6 +1,7 @@
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
 import pickle
 
 
@@ -16,12 +17,12 @@ def train_RFmodel(X, y):
 
 
     # Train the logistic regression model
-    model = RandomForestClassifier(n_estimators=2,
-                                    max_depth=2,
-                                    max_features=8).fit(X_train_scaled, y_train)
+    
+    model = LinearRegression()
+    lrmodel = model.fit(X_train_scaled, y_train)
     
     # Save the trained model
-    with open('models/RFmodel.pkl', 'wb') as f:
+    with open('models/lrmodel.pkl', 'wb') as f:
         pickle.dump(model, f)
 
-    return model, X_test_scaled, y_test
+    return lrmodel, X_test_scaled, y_test

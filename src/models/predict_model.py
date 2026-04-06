@@ -2,14 +2,20 @@
 from sklearn.metrics import accuracy_score, confusion_matrix
 
 # # Function to predict and evaluate
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import numpy as np
+
 def evaluate_model(model, X_test_scaled, y_test):
-    # Predict the loan eligibility on the testing set
     y_pred = model.predict(X_test_scaled)
 
-    # Calculate the accuracy score
-    accuracy = accuracy_score(y_pred, y_test)
+    mae = mean_absolute_error(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = np.sqrt(mse)
+    r2 = r2_score(y_test, y_pred)
 
-    # Calculate the confusion matrix
-    confusion_mat = confusion_matrix(y_test, y_pred)
-
-    return accuracy, confusion_mat
+    return {
+        "MAE": mae,
+        "MSE": mse,
+        "RMSE": rmse,
+        "R2": r2
+    }

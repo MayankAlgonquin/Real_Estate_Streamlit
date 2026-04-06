@@ -22,7 +22,7 @@ This app predicts the price of a property based on property features using a Ran
 
 # Load model
 try:
-    rf_pickle = open("models/RFmodel.pkl", "rb")
+    rf_pickle = open("models/lrmodel.pkl", "rb")
     rf_model = pickle.load(rf_pickle)
     rf_pickle.close()
     st.success("Model loaded successfully")
