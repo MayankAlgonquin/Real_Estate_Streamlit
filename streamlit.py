@@ -11,9 +11,14 @@ This app predicts the price of a property based on property features using a Ran
 """)
 
 # Load model
-rf_pickle = open("models/RFmodel.pkl", "rb")
-rf_model = pickle.load(rf_pickle)
-rf_pickle.close()
+try:
+    rf_pickle = open("models/RFmodel.pkl", "rb")
+    rf_model = pickle.load(rf_pickle)
+    rf_pickle.close()
+    st.success("Model loaded successfully")
+except Exception as e:
+    st.error(f"Model loading failed: {e}")
+    st.stop()
 
 # Form
 with st.form("user_inputs"):
