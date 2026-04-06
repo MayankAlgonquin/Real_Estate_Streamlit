@@ -4,125 +4,80 @@ import matplotlib.pyplot as plt
 import pickle
 import streamlit as st
 
-# Set the page title and description
+# Title
 st.title("Real Estate Price Predictor")
 st.write("""
-This app predicts whether price of a property based on geographic and macro-economic factors using Random Forest model.
+This app predicts the price of a property based on property features using a Random Forest model.
 """)
 
-# # Optional password protection (remove if not needed)
-# password_guess = st.text_input("Please enter your password?")
-# # this password is stores in streamlit secrets
-# if password_guess != st.secrets["password"]:
-#     st.stop()
-
-# Load the pre-trained model
+# Load model
 rf_pickle = open("models/RFmodel.pkl", "rb")
 rf_model = pickle.load(rf_pickle)
 rf_pickle.close()
 
-
-# Prepare the form to collect user inputs
+# Form
 with st.form("user_inputs"):
-    st.subheader("Loan Applicant Details")
-    
-    # Gender input
-    Gender = st.selectbox("Gender", options=["Male", "Female"])
-    
-    # Marital Status
-    Married = st.selectbox("Marital Status", options=["Yes", "No"])
-    
-    # Dependents
-    Dependents = st.selectbox("Number of Dependents", 
-                               options=["0", "1", "2", "3+"])
-    
-    # Education
-    Education = st.selectbox("Education Level", 
-                              options=["Graduate", "Not Graduate"])
-    
-    # Self Employment
-    Self_Employed = st.selectbox("Self Employed", options=["Yes", "No"])
-    
-    # Applicant Income
-    ApplicantIncome = st.number_input("Applicant Monthly Income", 
-                                       min_value=0, 
-                                       step=1000)
-    
-    # Coapplicant Income
-    CoapplicantIncome = st.number_input("Coapplicant Monthly Income", 
-                                         min_value=0, 
-                                         step=1000)
-    
-    # Loan Amount
-    LoanAmount = st.number_input("Loan Amount", 
-                                  min_value=0, 
-                                  step=1000)
-    
-    # Loan Amount Term
-    Loan_Amount_Term = st.selectbox("Loan Amount Term (Months)", 
-                                    options=["360", "180", "240", "120", "60"])
-    
-    # Credit History
-    Credit_History = st.selectbox("Credit History", 
-                                  options=["1", "0"])
-    
-    # Property Area
-    Property_Area = st.selectbox("Property Area", 
-                                 options=["Urban", "Semiurban", "Rural"])
-    
-    # Submit button
-    submitted = st.form_submit_button("Predict Loan Eligibility")
+    st.subheader("Property Details")
 
+    year_sold = st.number_input("Year Sold", min_value=1900, max_value=2100, step=1)
+    property_tax = st.number_input("Property Tax", min_value=0)
+    insurance = st.number_input("Insurance", min_value=0)
+    beds = st.number_input("Beds", min_value=0)
+    baths = st.number_input("Baths", min_value=0)
+    sqft = st.number_input("Square Feet", min_value=0)
+    year_built = st.number_input("Year Built", min_value=1800, max_value=2100, step=1)
+    lot_size = st.number_input("Lot Size", min_value=0)
 
-# Handle the dummy variables to pass to the model
+    basement = st.selectbox("Basement", [0, 1])
+    popular = st.selectbox("Popular", [0, 1])
+    recession = st.selectbox("Recession", [0, 1])
+    property_type_Condo = st.selectbox("Property Type Condo", [0, 1])
+
+    property_age = st.number_input("Property Age", min_value=0)
+
+    submitted = st.form_submit_button("Predict Price")
+
+# Prediction
 if submitted:
-    Gender_Male = 0 if Gender == "Female" else 1
-    Gender_Female = 1 if Gender == "Female" else 0
-
-    Married_Yes = 1 if Married == "Yes" else 0
-    Married_No = 1 if Married == "No" else 0
-
-    # Handle dependents
-    Dependents_0 = 1 if Dependents == "0" else 0
-    Dependents_1 = 1 if Dependents == "1" else 0
-    Dependents_2 = 1 if Dependents == "2" else 0
-    Dependents_3 = 1 if Dependents == "3+" else 0
-
-    Education_Graduate = 1 if Education == "Graduate" else 0
-    Education_Not_Graduate = 1 if Education == "Not Graduate" else 0
-
-    Self_Employed_Yes = 1 if Self_Employed == "Yes" else 0
-    Self_Employed_No = 1 if Self_Employed == "No" else 0
-
-    Property_Area_Rural = 1 if Property_Area == "Rural" else 0
-    Property_Area_Semiurban = 1 if Property_Area == "Semiurban" else 0
-    Property_Area_Urban = 1 if Property_Area == "Urban" else 0
-
-    # Convert Loan Amount Term and Credit History to integers
-    Loan_Amount_Term = int(Loan_Amount_Term)
-    Credit_History = int(Credit_History)
-
-    # Prepare the input for prediction. This has to go in the same order as it was trained
-    prediction_input = [[ApplicantIncome, CoapplicantIncome, LoanAmount,
-        Loan_Amount_Term, Credit_History, Gender_Female, Gender_Male,
-        Married_No, Married_Yes, Dependents_0, Dependents_1,
-        Dependents_2, Dependents_3, Education_Graduate,
-        Education_Not_Graduate, Self_Employed_No, Self_Employed_Yes,
-        Property_Area_Rural, Property_Area_Semiurban, Property_Area_Urban
+    prediction_input = [[
+        year_sold,
+        property_tax,
+        insurance,
+        beds,
+        baths,
+        sqft,
+        year_built,
+        lot_size,
+        basement,
+        popular,
+        recession,
+        property_age,
+        property_type_Condo
     ]]
 
-    # Make prediction
-    new_prediction = rf_model.predict(prediction_input)
+    prediction = rf_model.predict(prediction_input)
 
-    # Display result
     st.subheader("Prediction Result:")
-    if new_prediction[0] == 'Y':
-        st.write("You are eligible for the loan!")
-    else:
-        st.write("Sorry, you are not eligible for the loan.")
+    st.write(f"Estimated Property Price: ${int(prediction[0]):,}")
 
-st.write(
-    """We used a machine learning (Random Forest) model to predict your eligibility, the features used in this prediction are ranked by relative
-    importance below."""
-)
-st.image("feature_importance.png")
+# Feature Importance
+st.write("""
+We used a Random Forest model. Feature importance is shown below:
+""")
+
+feature_names = [
+    'year_sold', 'property_tax', 'insurance', 'beds', 'baths',
+    'sqft', 'year_built', 'lot_size', 'basement',
+    'popular', 'recession', 'property_age', 'property_type_Condo'
+]
+
+importances = rf_model.feature_importances_
+
+feat_df = pd.DataFrame({
+    "Feature": feature_names,
+    "Importance": importances
+}).sort_values(by="Importance", ascending=False)
+
+fig, ax = plt.subplots()
+sns.barplot(x="Importance", y="Feature", data=feat_df, ax=ax)
+st.pyplot(fig)
