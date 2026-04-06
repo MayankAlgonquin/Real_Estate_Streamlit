@@ -5,10 +5,9 @@ import pickle
 import streamlit as st
 
 # Set the page title and description
-st.title("Credit Loan Eligibility Predictor")
+st.title("Real Estate Price Predictor")
 st.write("""
-This app predicts whether a loan applicant is eligible for a loan 
-based on various personal and financial characteristics.
+This app predicts whether price of a property based on geographic and macro-economic factors using Random Forest model.
 """)
 
 # # Optional password protection (remove if not needed)
