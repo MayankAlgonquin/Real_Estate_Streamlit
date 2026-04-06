@@ -4,6 +4,16 @@ import matplotlib.pyplot as plt
 import pickle
 import streamlit as st
 
+import logging
+import os
+
+logging.basicConfig(
+    level=os.environ.get("LOGLEVEL", "DEBUG"),
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
 # Title
 st.title("Real Estate Price Predictor")
 st.write("""
