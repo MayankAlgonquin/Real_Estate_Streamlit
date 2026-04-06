@@ -86,7 +86,7 @@ feature_names = [
     'popular', 'recession', 'property_age', 'property_type_Condo'
 ]
 
-importances = rf_model.feature_importances_
+importances = rf_model.coef_
 
 feat_df = pd.DataFrame({
     "Feature": feature_names,
