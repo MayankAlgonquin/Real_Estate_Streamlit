@@ -24,5 +24,11 @@ def train_RFmodel(X, y):
     # Save the trained model
     with open('models/lrmodel.pkl', 'wb') as f:
         pickle.dump(model, f)
+    
+    with open("models/scaler.pkl", "wb") as f:
+        pickle.dump(scaler, f)
+    
+    with open("models/columns.pkl", "wb") as f:
+        pickle.dump(X.columns.tolist(), f)
 
     return lrmodel, X_test_scaled, y_test

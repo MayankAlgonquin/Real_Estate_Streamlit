@@ -19,10 +19,12 @@ st.title("Real Estate Price Predictor")
 st.write("""
 This app predicts the price of a property based on property features using a Linear Regression model.
 """)
-
+with open("models/scaler.pkl", "rb") as f:
+    scaler = pickle.load(f)
 # Load model
 try:
     rf_pickle = open("models/lrmodel.pkl", "rb")
+    
     rf_model = pickle.load(rf_pickle)
     rf_pickle.close()
     st.success("Model loaded successfully")
@@ -54,26 +56,43 @@ with st.form("user_inputs"):
 
 # Prediction
 if submitted:
-    prediction_input = [[
-        year_sold,
-        property_tax,
-        insurance,
-        beds,
-        baths,
-        sqft,
-        year_built,
-        lot_size,
-        basement,
-        popular,
-        recession,
-        property_age,
-        property_type_Condo
-    ]]
+    with open("models/columns.pkl", "rb") as f:
+        cols = pickle.load(f)
 
-    prediction = rf_model.predict(prediction_input)
+    # Create DataFrame with SAME structure
+    prediction_input = pd.DataFrame([{
+        "year_sold": year_sold,
+        "property_tax": property_tax,
+        "insurance": insurance,
+        "beds": beds,
+        "baths": baths,
+        "sqft": sqft,
+        "year_built": year_built,
+        "lot_size": lot_size,
+        "basement": basement,
+        "popular": popular,
+        "recession": recession,
+        "property_age": property_age,
+        "property_type_Condo": property_type_Condo
+    }])
 
+    # Align columns
+    input_df = prediction_input.reindex(columns=cols, fill_value=0)
+
+    # Scale
+    with open("models/scaler.pkl", "rb") as f:
+        scaler = pickle.load(f)
+
+    input_scaled = scaler.transform(input_df)
+
+    # Predict
+    prediction = rf_model.predict(input_scaled)
+
+  
     st.subheader("Prediction Result:")
-    st.write(f"Estimated Property Price: ${int(prediction[0]):,}")
+    price = max(0, int(prediction[0]))
+    st.write(f"Estimated Property Price: ${price:,}")
+    
 
 # Feature Importance
 st.write("""
