@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 # Title
 st.title("Real Estate Price Predictor")
 st.write("""
-This app predicts the price of a property based on property features using a Random Forest model.
+This app predicts the price of a property based on property features using a Linear Regression model.
 """)
 
 # Load model
@@ -77,7 +77,7 @@ if submitted:
 
 # Feature Importance
 st.write("""
-We used a Random Forest model. Feature importance is shown below:
+We used a Linear Regression model. Feature importance is shown below:
 """)
 
 feature_names = [
@@ -86,6 +86,7 @@ feature_names = [
     'popular', 'recession', 'property_age', 'property_type_Condo'
 ]
 
+#Appends feature importance
 importances = rf_model.coef_
 
 feat_df = pd.DataFrame({
