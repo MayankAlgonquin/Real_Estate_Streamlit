@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pickle
 import streamlit as st
-
+import random
 import logging
 import os
 
@@ -31,6 +31,16 @@ try:
 except Exception as e:
     st.error(f"Model loading failed: {e}")
     st.stop()
+
+fun_facts = [
+    "Toronto and Vancouver consistently rank among the most expensive housing markets in Canada due to high demand and limited supply.",
+    "Interest rate changes by the Bank of Canada have a direct impact on mortgage affordability and housing demand.",
+    "Immigration is a major driver of housing demand, especially in urban areas like Toronto, Calgary, and Montreal.",
+    "Condominiums are often the entry point for first-time buyers due to lower prices compared to detached homes.",
+    "Rental markets in major Canadian cities have seen strong growth due to rising home prices and increased population."
+]
+random_fact = "Fun Fact: " + random.choice(fun_facts)
+st.info(random_fact)
 
 # Form
 with st.form("user_inputs"):
@@ -116,3 +126,8 @@ feat_df = pd.DataFrame({
 fig, ax = plt.subplots()
 sns.barplot(x="Importance", y="Feature", data=feat_df, ax=ax)
 st.pyplot(fig)
+st.image("actual_vs_predicted.png")
+
+linked = "Like my app? Find me on LinkedIn at https://www.linkedin.com/in/mayannkarora/"
+
+st.info(linked)

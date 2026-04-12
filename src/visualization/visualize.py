@@ -47,6 +47,26 @@ def plot_feature_importance(model, x):
     plt.tight_layout()
 
     fig.savefig("feature_importance.png")
+   
+ 
+#Plot actual vs predicted    
+def plot_actual_vs_predicted(y_true, y_pred):
+    
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(y_true, y_pred)
+    
+    # Perfect prediction line
+    plt.plot([y_true.min(), y_true.max()],
+             [y_true.min(), y_true.max()],
+             linestyle='--')
+
+    plt.xlabel("Actual Values")
+    plt.ylabel("Predicted Values")
+    plt.title("Actual vs Predicted")
+
+    plt.tight_layout()
+    plt.savefig("actual_vs_predicted.png")
     
 def plot_confusion_matrix(y_true, y_pred, classes, normalize=False, title='Confusion Matrix'):
     """

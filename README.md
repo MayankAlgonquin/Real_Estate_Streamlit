@@ -1,26 +1,24 @@
-# credit_eligibility
+# Real Estate Price Predictor
 This app has been built using Streamlit and deployed with Streamlit community cloud
 
-https://credit-eligibility-app.streamlit.app/
+https://realestateapp-qk5mrdnabor7ycxsesa3jp.streamlit.app
 
-This application predicts whether someone is eligible for a loan based on inputs derived from the German Credit Risk dataset. The model aims to help users assess loan eligibility by leveraging machine learning predictions.
+This application predicts price of a house based on various factors like insurance, number of beds, baths, etc.
 
 ## Features
 - User-friendly interface powered by Streamlit.
-- Input form to enter details such as credit history, loan amount, income, and other relevant factors.
-- Real-time prediction of loan eligibility based on the trained model.
+- Input form to enter details such as year builts, year sold, number of beds, baths, etc.
+- Real-time prediction of real estate property price based on the house factors.
 - Accessible via Streamlit Community Cloud.
 
 ## Dataset
 The application includes features like:
-- Age
-- Job
-- Housing status
-- Credit amount
-- Duration of credit
-- Purpose of loan
-- And other factors influencing credit risk.
-
+- Year Built 
+- Year Sold
+- Sqft
+- Number of Rooms
+- Number of Baths,
+ etc..
 ## Technologies Used
 - **Streamlit**: For building the web application.
 - **Scikit-learn**: For model training and evaluation.

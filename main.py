@@ -1,17 +1,8 @@
 # from setuptools import find_packages, setup
 
 
-# setup(
-#     name='src',
-#     packages=find_packages(),
-#     version='0.1.0',
-#     description='Credit Risk Model code structuring',
-#     author='Swapnil Kangralkar',
-#     license='',
-# )
-
 from src.data.make_dataset import load_and_clean_data
-from src.visualization.visualize import plot_correlation_heatmap, plot_feature_importance, plot_confusion_matrix
+from src.visualization.visualize import plot_correlation_heatmap, plot_feature_importance, plot_confusion_matrix, plot_actual_vs_predicted
 from src.features.build_features import create_dummy_vars
 from src.models.train_model import train_RFmodel
 from src.models.predict_model import evaluate_model
@@ -24,7 +15,9 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
+os.makedirs('data/processed', exist_ok=True)
+os.makedirs('models', exist_ok=True)
+os.makedirs('data/raw', exist_ok=True)
 if __name__ == "__main__":
     # Load and preprocess the data
     try:
@@ -56,6 +49,8 @@ if __name__ == "__main__":
     try:
         plot_feature_importance(model, X)
         metrics = evaluate_model(model, X_test_scaled, y_test)
+        y_pred = model.predict(X_test_scaled)
+        plot_actual_vs_predicted(y_test, y_pred)
         logger.info("Model evaluated successfully")
     except Exception as e:
         logger.exception(f"Error during evaluation: {e}")
